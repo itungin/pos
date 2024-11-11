@@ -72,33 +72,33 @@
     </div>
   </div>
   
-  <!-- Barang Content -->
+  <!-- Main Content -->
   <main class="container">
-    <h2>Barang</h2>
-    <p>Manage your products here.</p>
-    <table id="barangTable" class="table table-striped">
+    <h2>Gudang</h2>
+    <p>Manage your inventory here.</p>
+    <table id="dt" class="table table-bordered w-100">
       <thead>
         <tr>
-          <th>Product ID</th>
+          <th>ID</th>
           <th>Name</th>
-          <th>Price</th>
           <th>Category</th>
-          <th>Quantity</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Stock</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <!-- Product items will be populated here -->
+        <!-- Inventory items will be populated here -->
       </tbody>
     </table>
-    <button id="checkoutBtn" class="btn btn-success">Go to Checkout</button>
   </main>
-  <!-- JavaScript to fetch, filter, and display product data with Vpot functionality -->
-  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-  <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-  <!-- <script src="src/js/barang.js" type="module"></script> -->
-  
+
+  <footer class="blog-footer">
+    <p>Welcome to Kasirku</p>
+  </footer>
+
+  <!-- JavaScript to fetch and display warehouse data -->
   <script>
     async function fetchGudangData() {
       try {
@@ -133,9 +133,11 @@
         console.error("Error fetching warehouse data:", error);
       }
     }
-  
+
     // Call the function when the page loads
     document.addEventListener("DOMContentLoaded", fetchGudangData);
   </script>
+
 </body>
+
 </html>

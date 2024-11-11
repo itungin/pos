@@ -97,77 +97,45 @@
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-  <script src="src/js/barang.js" type="module"></script>
+  <!-- <script src="src/js/barang.js" type="module"></script> -->
   
-  <!-- <script>
-    // Sample data for demo purposes
-    const products = [
-      { id: 1, name: 'Product A', price: 100, category: 'Category 1' },
-      { id: 2, name: 'Product B', price: 150, category: 'Category 2' },
-      // Add more sample products as needed
-    ];
+  <script>
+    async function fetchGudangData() {
+      try {
+        const response = await fetch("https://asia-southeast2-awangga.cloudfunctions.net/itungin/products");
+        const data = await response.json();
     
-    const checkoutItems = {}; // Store selected items and their quantities
-
-    // Populate the table with products and buttons
-    function populateTable() {
-      const tableBody = document.querySelector("#barangTable tbody");
-      products.forEach((product) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${product.id}</td>
-          <td>${product.name}</td>
-          <td>${product.price}</td>
-          <td>${product.category}</td>
-          <td id="quantity-${product.id}">0</td>
-          <td>
-            <button class="btn btn-sm btn-success" onclick="incrementQuantity(${product.id})">+</button>
-            <button class="btn btn-sm btn-warning" onclick="decrementQuantity(${product.id})">-</button>
-            <button class="btn btn-sm btn-primary" onclick="confirmItem(${product.id})">Ok</button>
-          </td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
-
-    // Increase item quantity
-    function incrementQuantity(id) {
-      const quantityCell = document.getElementById(`quantity-${id}`);
-      const quantity = parseInt(quantityCell.textContent) + 1;
-      quantityCell.textContent = quantity;
-    }
-
-    // Decrease item quantity
-    function decrementQuantity(id) {
-      const quantityCell = document.getElementById(`quantity-${id}`);
-      const quantity = Math.max(0, parseInt(quantityCell.textContent) - 1);
-      quantityCell.textContent = quantity;
-    }
-
-    // Add the selected item to checkout list and reset quantity display
-    function confirmItem(id) {
-      const quantity = parseInt(document.getElementById(`quantity-${id}`).textContent);
-      if (quantity > 0) {
-        checkoutItems[id] = quantity;
-        alert(`Item with ID ${id} confirmed with quantity: ${quantity}`);
-        document.getElementById(`quantity-${id}`).textContent = '0'; // Reset after confirming
-      } else {
-        alert("Quantity must be greater than 0");
+        const tableBody = document.querySelector("#dt tbody");
+        tableBody.innerHTML = ""; // Clear existing rows
+    
+        data.forEach(item => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.name}</td>
+            <td>${item.category}</td>
+            <td>${item.description}</td>
+            <td>${item.price}</td>
+            <td>${item.stock}</td>
+            <td>
+              <button class="btn btn-primary btn-sm">Edit</button>
+              <button class="btn btn-danger btn-sm">Delete</button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+    
+        // Inisialisasi DataTable setelah data selesai dimuat
+        $('#dt').DataTable({
+          "responsive": true // Aktifkan mode responsif jika diinginkan
+        });
+      } catch (error) {
+        console.error("Error fetching warehouse data:", error);
       }
     }
-
-    // Handle checkout button to move to kasir.html
-    document.getElementById("checkoutBtn").addEventListener("click", function() {
-      localStorage.setItem("checkoutItems", JSON.stringify(checkoutItems));
-      window.location.href = "kasir.html";
-    });
-
-    // Initialize the table on page load
-    document.addEventListener("DOMContentLoaded", function() {
-      populateTable();
-      $('#barangTable').DataTable();
-    });
-  </script> -->
-
+  
+    // Call the function when the page loads
+    document.addEventListener("DOMContentLoaded", fetchGudangData);
+  </script>
 </body>
 </html>

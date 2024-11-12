@@ -16,27 +16,12 @@
   <link href="/static/css/pos.css" rel="stylesheet">
 
   <style>
-    #dt.dataTable.no-footer {
-      border-bottom: unset;
-    }
-
-    #dt tbody td {
-      display: block;
-      border: unset;
-    }
-
-    #dt>tbody>tr>td {
-      border-top: unset;
-    }
-
-    .dataTables_paginate {
-      display: flex;
-      align-items: center;
-    }
-
-    .dataTables_paginate a {
-      padding: 0 10px;
-    }
+    /* Styling for the page */
+    #dt.dataTable.no-footer { border-bottom: unset; }
+    #dt tbody td { display: block; border: unset; }
+    #dt>tbody>tr>td { border-top: unset; }
+    .dataTables_paginate { display: flex; align-items: center; }
+    .dataTables_paginate a { padding: 0 10px; }
   </style>
 
   <!-- Custom javascript for this template -->
@@ -47,7 +32,6 @@
 </head>
 
 <body>
-
   <div class="container">
     <!-- Header Section (Consistent Navbar) -->
     <header class="blog-header py-3">
@@ -119,6 +103,7 @@
             <!-- Cart items will be populated here -->
           </ul>
           <button class="btn btn-primary mt-3">Checkout</button>
+          <button class="btn btn-secondary mt-3" id="cancelButton">Cancel</button>
         </div>
       </div>
     </div>
@@ -144,6 +129,21 @@
           <span class="badge bg-primary rounded-pill">${product.quantity}</span>
         `;
         cartList.appendChild(listItem);
+      });
+
+      // Prevent navigation away from page until checkout or cancel
+      window.addEventListener("beforeunload", function (event) {
+        if (selectedProducts.length > 0) {
+          event.preventDefault();
+          event.returnValue = ""; // Show confirmation dialog
+        }
+      });
+
+      // Cancel button event handler
+      document.getElementById("cancelButton").addEventListener("click", function() {
+        localStorage.removeItem("selectedProducts"); // Clear selected items from localStorage
+        cartList.innerHTML = ""; // Clear cart display
+        alert("Transaction canceled and cart cleared.");
       });
     });
   </script>

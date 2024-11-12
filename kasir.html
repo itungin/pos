@@ -67,7 +67,6 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <a class="p-2 nav-link" href="index.html"><i class="bi bi-house"></i> Home</a>
-              <!-- <a class="p-2 nav-link active" href="gudang.html"><i class="bi bi-building"></i> Gudang</a> -->
               <a class="p-2 nav-link" href="barang.html"><i class="bi bi-basket"></i> Barang</a>
               <a class="p-2 nav-link" href="kasir.html"><i class="bi bi-cart"></i> Kasir</a>
               <div class="nav-item dropdown">
@@ -92,47 +91,62 @@
     </div>
   </div>
 
-    
-  
-    <!-- Kasir Content -->
-    <main class="container">
-      <h2>Kasir</h2>
-      <p>This is the cashier interface where items can be added to the cart and processed.</p>
-      <div class="row g-5">
-        <div class="col-md-8">
-          <input class="form-control" type="search" placeholder="Cari Barang">
-          <table class="table mt-3">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Product list to add to cart -->
-            </tbody>
-          </table>
-        </div>
-        <div class="col-md-4">
-          <div class="bg-light p-3">
-            <h4>Cart</h4>
-            <ul class="list-group">
-              <!-- Cart items will be populated here -->
-            </ul>
-            <button class="btn btn-primary mt-3">Checkout</button>
-          </div>
+  <!-- Kasir Content -->
+  <main class="container">
+    <h2>Kasir</h2>
+    <p>This is the cashier interface where items can be added to the cart and processed.</p>
+    <div class="row g-5">
+      <div class="col-md-8">
+        <input class="form-control" type="search" placeholder="Cari Barang">
+        <table class="table mt-3">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="productList">
+            <!-- Product list to add to cart -->
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-4">
+        <div class="bg-light p-3">
+          <h4>Cart</h4>
+          <ul class="list-group" id="cartList">
+            <!-- Cart items will be populated here -->
+          </ul>
+          <button class="btn btn-primary mt-3">Checkout</button>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const selectedProducts = JSON.parse(localStorage.getItem("selectedProducts")) || [];
+      const cartList = document.getElementById("cartList");
+
+      // Render selected products in the cart
+      selectedProducts.forEach(product => {
+        const listItem = document.createElement("li");
+        listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+        listItem.innerHTML = `
+          <div>
+            <strong>${product.name}</strong> <br>
+            <small>Category: ${product.category}</small> <br>
+            <small>Description: ${product.description}</small> <br>
+            <small>Price: ${product.price}</small> <br>
+            <small>Quantity: ${product.quantity}</small>
+          </div>
+          <span class="badge bg-primary rounded-pill">${product.quantity}</span>
+        `;
+        cartList.appendChild(listItem);
+      });
+    });
+  </script>
+
 </body>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const selectedProducts = JSON.parse(localStorage.getItem("selectedProducts")) || [];
-    // Render selectedProducts ke tabel kasir
-  });
-  
-</script>
 </html>

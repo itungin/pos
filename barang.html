@@ -112,11 +112,13 @@
             <td>${item.description}</td>
             <td>${item.price}</td>
             <td id="stock-${item.id}">${item.stock}</td>
-            <td>
-              <button class="btn btn-success btn-sm" onclick="addProduct('${item.id}', '${item.name}', '${item.price}')">+</button>
-              <input type="text" id="quantity-${item.id}" value="0" style="width: 40px; text-align: center;" readonly />
-              <button class="btn btn-danger btn-sm" onclick="removeProduct('${item.id}')">-</button>
-            </td>
+<td>
+  <button class="btn btn-success btn-sm" onclick="addProduct('${item.id}', '${item.name}', '${item.price}')">+</button>
+  <input type="text" id="quantity-${item.id}" value="0" style="width: 40px; text-align: center;" readonly />
+  <button class="btn btn-danger btn-sm" onclick="removeProduct('${item.id}')">-</button>
+  <button class="btn btn-primary btn-sm" onclick="confirmProduct('${item.id}')">OK</button>
+</td>
+
           `;
           tableBody.appendChild(row);
         });
@@ -170,6 +172,25 @@
         }
       }
     }
+
+    function confirmProduct(id) {
+      const quantityElement = document.getElementById(`quantity-${id}`);
+      let quantity = parseInt(quantityElement.value);
+    
+      if (quantity > 0) {
+        const productIndex = selectedProducts.findIndex(p => p.id === id);
+        if (productIndex > -1) {
+          selectedProducts[productIndex].quantity = quantity;
+        } else {
+          const name = document.querySelector(`#dt tbody tr td:nth-child(2)`).innerText; // Get product name
+          const price = document.querySelector(`#dt tbody tr td:nth-child(5)`).innerText; // Get product price
+          selectedProducts.push({ id, name, price, quantity });
+        }
+      } else {
+        alert("Please add quantity before confirming.");
+      }
+    }
+    
 
     document.getElementById("checkoutBtn").addEventListener("click", function() {
       localStorage.setItem("selectedProducts", JSON.stringify(selectedProducts));

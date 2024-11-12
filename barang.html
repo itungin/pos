@@ -80,7 +80,7 @@
         <!-- Inventory items will be populated here -->
       </tbody>
     </table>
-    <!-- <button id="checkoutBtn" class="btn btn-success mt-3">OK</button> -->
+    <button id="checkoutBtn" class="btn btn-success mt-3">OK</button>
   </main>
 
   <footer class="blog-footer">
@@ -191,8 +191,8 @@
       }
     }
     
-    /* checkoutBtn */
-    document.getElementById("confirmProduct").addEventListener("click", function() {
+    /*  */
+    document.getElementById("checkoutBtn").addEventListener("click", function() {
       localStorage.setItem("selectedProducts", JSON.stringify(selectedProducts));
       window.location.href = "kasir.html";
     });

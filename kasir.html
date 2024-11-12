@@ -103,7 +103,7 @@
             <!-- Cart items will be populated here -->
           </ul>
           <button class="btn btn-primary mt-3">Checkout</button>
-          <button class="btn btn-secondary mt-3" id="cancelButton">Cancel</button>
+          <!-- <button class="btn btn-secondary mt-3" id="cancelButton">Cancel</button> -->
         </div>
       </div>
     </div>
@@ -178,7 +178,7 @@
           confirmButtonText: 'OK'
         }).then(() => {
           localStorage.removeItem("selectedProducts");
-          cartList.innerHTML = ""; // Clear the cart after checkout
+          cartList.innerHTML = "checkout.html"; // Clear the cart after checkout
         });
       });
     });

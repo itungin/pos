@@ -109,11 +109,19 @@
     </div>
   </main>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module">
+    document.addEventListener("DOMContentLoaded", function () {
       const selectedProducts = JSON.parse(localStorage.getItem("selectedProducts")) || [];
       const cartList = document.getElementById("cartList");
-
+      const checkoutButton = document.querySelector(".btn-primary");
+      const cancelButton = document.createElement("button");
+  
+      cancelButton.className = "btn btn-danger mt-2";
+      cancelButton.innerText = "Cancel";
+      cancelButton.onclick = cancelTransaction;
+      document.querySelector(".bg-light").appendChild(cancelButton);
+  
       // Render selected products in the cart
       selectedProducts.forEach(product => {
         const listItem = document.createElement("li");
@@ -130,23 +138,52 @@
         `;
         cartList.appendChild(listItem);
       });
-
-      // Prevent navigation away from page until checkout or cancel
-      window.addEventListener("beforeunload", function (event) {
-        if (selectedProducts.length > 0) {
-          event.preventDefault();
-          event.returnValue = ""; // Show confirmation dialog
-        }
+  
+      // Block navigation if transaction is active
+      window.addEventListener("beforeunload", function (e) {
+        e.preventDefault();
+        Swal.fire({
+          icon: 'warning',
+          title: 'Hold on!',
+          text: 'Please complete or cancel your transaction before leaving.',
+          confirmButtonText: 'OK'
+        });
+        e.returnValue = ''; // Required for some browsers
       });
-
-      // Cancel button event handler
-      document.getElementById("cancelButton").addEventListener("click", function() {
-        localStorage.removeItem("selectedProducts"); // Clear selected items from localStorage
-        cartList.innerHTML = ""; // Clear cart display
-        alert("Transaction canceled and cart cleared.");
+  
+      // Cancel transaction function
+      function cancelTransaction() {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Your cart will be cleared.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, cancel it!',
+          cancelButtonText: 'No, keep it'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.removeItem("selectedProducts");
+            cartList.innerHTML = ""; // Clear the cart UI
+            Swal.fire('Cancelled', 'Your cart has been cleared.', 'success');
+          }
+        });
+      }
+  
+      // Checkout button functionality
+      checkoutButton.addEventListener("click", function () {
+        Swal.fire({
+          icon: 'success',
+          title: 'Checkout Complete!',
+          text: 'Thank you for your purchase!',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          localStorage.removeItem("selectedProducts");
+          cartList.innerHTML = ""; // Clear the cart after checkout
+        });
       });
     });
   </script>
+  
 
 </body>
 </html>

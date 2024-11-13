@@ -116,12 +116,12 @@
       const cartList = document.getElementById("cartList");
       const checkoutButton = document.querySelector(".btn-primary");
       const cancelButton = document.createElement("button");
-  
+    
       cancelButton.className = "btn btn-danger mt-2";
       cancelButton.innerText = "Cancel";
       cancelButton.onclick = cancelTransaction;
       document.querySelector(".bg-light").appendChild(cancelButton);
-  
+    
       // Render selected products in the cart
       selectedProducts.forEach(product => {
         const listItem = document.createElement("li");
@@ -138,7 +138,7 @@
         `;
         cartList.appendChild(listItem);
       });
-  
+    
       // Block navigation if transaction is active
       window.addEventListener("beforeunload", function (e) {
         e.preventDefault();
@@ -150,7 +150,7 @@
         });
         e.returnValue = ''; // Required for some browsers
       });
-  
+    
       // Cancel transaction function
       function cancelTransaction() {
         Swal.fire({
@@ -168,7 +168,7 @@
           }
         });
       }
-  
+    
       // Checkout button functionality
       checkoutButton.addEventListener("click", function () {
         Swal.fire({
@@ -178,10 +178,11 @@
           confirmButtonText: 'OK'
         }).then(() => {
           localStorage.removeItem("selectedProducts");
-          cartList.innerHTML = "checkout.html"; // Clear the cart after checkout
+          cartList.innerHTML = ""; // Clear the cart after checkout
         });
       });
     });
+    
   </script>
   
 

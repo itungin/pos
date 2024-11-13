@@ -140,16 +140,7 @@
       });
     
       // Block navigation if transaction is active
-      window.addEventListener("beforeunload", function (e) {
-        e.preventDefault();
-        Swal.fire({
-          icon: 'warning',
-          title: 'Hold on!',
-          text: 'Please complete or cancel your transaction before leaving.',
-          confirmButtonText: 'OK'
-        });
-        e.returnValue = ''; // Required for some browsers
-      });
+
     
       // Cancel transaction function
       function cancelTransaction() {

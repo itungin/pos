@@ -129,8 +129,6 @@
         listItem.innerHTML = `
           <div>
             <strong>${product.name}</strong> <br>
-            <small>Category: ${product.category}</small> <br>
-            <small>Description: ${product.description}</small> <br>
             <small>Price: ${product.price}</small> <br>
             <small>Quantity: ${product.quantity}</small>
           </div>
@@ -179,7 +177,7 @@
         selectedProducts.forEach(selected => {
           const product = storedProducts.find(p => p.id === selected.id);
           if (product) {
-            product.stock = product.stock - selected.quantity;
+            product.stock -= selected.quantity;
           }
         });
     
@@ -187,6 +185,7 @@
       }
     });
   </script>
+  
   
   
   

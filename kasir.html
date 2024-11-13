@@ -168,6 +168,7 @@
         }).then(() => {
           localStorage.removeItem("selectedProducts");
           cartList.innerHTML = ""; // Clear the cart after checkout
+          window.location.href = "barang.html"; // Redirect to barang.html after checkout
         });
       });
     
@@ -183,11 +184,10 @@
         });
     
         localStorage.setItem("warehouseProducts", JSON.stringify(storedProducts));
-        // Update UI for stocks in barang.html by reloading it
-        window.location.href = "barang.html";
       }
     });
   </script>
+  
   
   
 

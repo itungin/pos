@@ -180,29 +180,37 @@
         }
       });
   
-      // Function to update stock in database
-      async function updateStockInDatabase() {
-        const updatePromises = selectedProducts.map(async (product) => {
-          // Hitungan stok terbaru
-          const updatedStock = product.stock - product.quantity;
-  
-          // Mengirim permintaan PATCH ke API dengan ID produk
-          const response = await fetch(`https://asia-southeast2-awangga.cloudfunctions.net/itungin/products/${product.id}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ stock: updatedStock }) // Mengirim stok terbaru
-          });
-  
-          if (!response.ok) {
-            throw new Error(`Failed to update stock for product ID: ${product.id}`);
-          }
-        });
-  
-        // Menunggu semua permintaan pembaruan stok selesai
-        await Promise.all(updatePromises);
+// Tambahkan logging untuk memeriksa response dari server
+async function updateStockInDatabase() {
+  const updatePromises = selectedProducts.map(async (product) => {
+    const updatedStock = product.stock - product.quantity;
+    
+    try {
+      const response = await fetch(`https://asia-southeast2-awangga.cloudfunctions.net/itungin/product-id?id=${productId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ stock: updatedStock })
+      });
+      
+      // Tambahkan logging untuk status dan body response
+      console.log(`Response status for product ID ${product.id}:`, response.status);
+      const responseBody = await response.json();
+      console.log(`Response body for product ID ${product.id}:`, responseBody);
+
+      if (!response.ok) {
+        throw new Error(`Failed to update stock for product ID: ${product.id}`);
       }
+    } catch (error) {
+      console.error("Error updating stock for product ID:", product.id, error);
+      throw error; // Re-throw error to trigger checkout failed alert
+    }
+  });
+
+  await Promise.all(updatePromises);
+}
+
     });
   </script>
   

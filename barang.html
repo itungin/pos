@@ -93,27 +93,19 @@
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-
+  
   <script>
     let selectedProducts = [];
-
+  
     async function fetchGudangData() {
       try {
-        // Simulasi fetch data dari API
         const response = await fetch("https://asia-southeast2-awangga.cloudfunctions.net/itungin/products");
         const data = await response.json();
     
-        // Simpan data ke localStorage jika belum ada
-        const storedProducts = JSON.parse(localStorage.getItem("warehouseProducts"));
-        if (!storedProducts) {
-          localStorage.setItem("warehouseProducts", JSON.stringify(data));
-        }
-    
-        const products = JSON.parse(localStorage.getItem("warehouseProducts")) || data;
         const tableBody = document.querySelector("#dt tbody");
         tableBody.innerHTML = "";
     
-        products.forEach(item => {
+        data.forEach(item => {
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>${item.id}</td>
@@ -138,9 +130,6 @@
         console.error("Error fetching warehouse data:", error);
       }
     }
-    
-    document.addEventListener("DOMContentLoaded", fetchGudangData);
-    
     
     function addProduct(id, name, price) {
       const stockElement = document.getElementById(`stock-${id}`);
@@ -190,8 +179,8 @@
     });
     
     document.addEventListener("DOMContentLoaded", fetchGudangData);
-    
   </script>
+  
 </body>
 
 </html>

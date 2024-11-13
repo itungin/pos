@@ -116,12 +116,12 @@
       const cartList = document.getElementById("cartList");
       const checkoutButton = document.querySelector(".btn-primary");
       const cancelButton = document.createElement("button");
-    
+  
       cancelButton.className = "btn btn-danger mt-2";
       cancelButton.innerText = "Cancel";
       cancelButton.onclick = cancelTransaction;
       document.querySelector(".bg-light").appendChild(cancelButton);
-    
+  
       // Render selected products in the cart
       selectedProducts.forEach(product => {
         const listItem = document.createElement("li");
@@ -136,7 +136,7 @@
         `;
         cartList.appendChild(listItem);
       });
-    
+  
       // Cancel transaction function
       function cancelTransaction() {
         Swal.fire({
@@ -154,37 +154,58 @@
           }
         });
       }
-    
+  
       // Checkout button functionality
-      checkoutButton.addEventListener("click", function () {
-        updateStockAfterCheckout();
-        Swal.fire({
-          icon: 'success',
-          title: 'Checkout Complete!',
-          text: 'Thank you for your purchase!',
-          confirmButtonText: 'OK'
-        }).then(() => {
-          localStorage.removeItem("selectedProducts");
-          cartList.innerHTML = ""; // Clear the cart after checkout
-          window.location.href = "barang.html"; // Redirect to barang.html after checkout
-        });
+      checkoutButton.addEventListener("click", async function () {
+        try {
+          await updateStockInDatabase();
+          Swal.fire({
+            icon: 'success',
+            title: 'Checkout Complete!',
+            text: 'Thank you for your purchase!',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            localStorage.removeItem("selectedProducts");
+            cartList.innerHTML = ""; // Clear the cart after checkout
+            window.location.href = "barang.html"; // Redirect to barang.html after checkout
+          });
+        } catch (error) {
+          console.error("Error updating stock:", error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Checkout Failed',
+            text: 'There was an error processing your checkout. Please try again.',
+            confirmButtonText: 'OK'
+          });
+        }
       });
-    
-      // Function to update stock after checkout
-      function updateStockAfterCheckout() {
-        const storedProducts = JSON.parse(localStorage.getItem("warehouseProducts")) || [];
-        
-        selectedProducts.forEach(selected => {
-          const product = storedProducts.find(p => p.id === selected.id);
-          if (product) {
-            product.stock -= selected.quantity;
+  
+      // Function to update stock in database
+      async function updateStockInDatabase() {
+        const updatePromises = selectedProducts.map(async (product) => {
+          // Hitungan stok terbaru
+          const updatedStock = product.stock - product.quantity;
+  
+          // Mengirim permintaan PATCH ke API dengan ID produk
+          const response = await fetch(`https://asia-southeast2-awangga.cloudfunctions.net/itungin/products/${product.id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ stock: updatedStock }) // Mengirim stok terbaru
+          });
+  
+          if (!response.ok) {
+            throw new Error(`Failed to update stock for product ID: ${product.id}`);
           }
         });
-    
-        localStorage.setItem("warehouseProducts", JSON.stringify(storedProducts));
+  
+        // Menunggu semua permintaan pembaruan stok selesai
+        await Promise.all(updatePromises);
       }
     });
   </script>
+  
   
   
   

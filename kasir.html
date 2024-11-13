@@ -140,7 +140,16 @@
       });
     
       // Block navigation if transaction is active
-
+      window.addEventListener("beforeunload", function (e) {
+        e.preventDefault();
+        Swal.fire({
+          icon: 'warning',
+          title: 'Hold on!',
+          text: 'Please complete or cancel your transaction before leaving.',
+          confirmButtonText: 'OK'
+        });
+        e.returnValue = ''; // Required for some browsers
+      });
     
       // Cancel transaction function
       function cancelTransaction() {
@@ -162,6 +171,7 @@
     
       // Checkout button functionality
       checkoutButton.addEventListener("click", function () {
+        updateStockAfterCheckout();
         Swal.fire({
           icon: 'success',
           title: 'Checkout Complete!',
@@ -172,6 +182,22 @@
           cartList.innerHTML = ""; // Clear the cart after checkout
         });
       });
+    
+      // Function to update stock after checkout
+      function updateStockAfterCheckout() {
+        const storedProducts = JSON.parse(localStorage.getItem("warehouseProducts")) || [];
+        
+        selectedProducts.forEach(selected => {
+          const product = storedProducts.find(p => p.id === selected.id);
+          if (product) {
+            product.stock = product.stock - selected.quantity;
+          }
+        });
+    
+        localStorage.setItem("warehouseProducts", JSON.stringify(storedProducts));
+        // Update UI for stocks in barang.html by reloading it
+        window.location.href = "barang.html";
+      }
     });
     
   </script>

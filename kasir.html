@@ -121,8 +121,8 @@
       document.addEventListener("DOMContentLoaded", function () {
         const selectedProducts = JSON.parse(localStorage.getItem("selectedProducts")) || [];
         const cartList = document.getElementById("cartList");
-        const checkoutButton = document.getElementById("checkoutButton");
-
+        const checkoutButton = document.querySelector(".btn-primary");
+    
         // Render selected products in the cart
         selectedProducts.forEach(product => {
           const listItem = document.createElement("li");

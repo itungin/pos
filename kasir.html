@@ -129,11 +129,13 @@
           listItem.className = "list-group-item d-flex justify-content-between align-items-center";
           listItem.innerHTML = `
             <div>
-              <strong>${product.name}</strong> <br>
-              <small>Price: ${product.price}</small> <br>
-              <small>Quantity: ${product.quantity}</small>
+              <strong>${product.name || "Unknown Product"}</strong> <br>
+              <small>Category: ${product.category || "Not Available"}</small> <br>
+              <small>Description: ${product.description || "Not Available"}</small> <br>
+              <small>Price: ${product.price || 0}</small> <br>
+              <small>Quantity: ${product.quantity || 0}</small>
             </div>
-            <span class="badge bg-primary rounded-pill">${product.quantity}</span>
+            <span class="badge bg-primary rounded-pill">${product.quantity || 0}</span>
           `;
           cartList.appendChild(listItem);
         });
